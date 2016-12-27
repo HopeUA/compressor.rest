@@ -1,0 +1,10 @@
+{
+  "service": {
+    "group": "test",
+    "name": "auth",
+    "defaultAdmin": {
+      "email": "admin@test.com",
+      "password": "test"
+    }
+  }
+}

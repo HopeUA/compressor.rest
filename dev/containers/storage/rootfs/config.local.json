@@ -1,0 +1,12 @@
+{
+  "services": {
+    "auth": {
+      "url": "http://auth.compressor:3000/v1"
+    }
+  },
+  "service": {
+    "group": "test",
+    "name": "storage",
+    "rootPath": "/data/storage"
+  }
+}

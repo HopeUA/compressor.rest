@@ -1,0 +1,24 @@
+{
+  "name": "User",
+  "description": "Application user",
+  "plural": "users",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "strict": true,
+  "properties": {
+    "id": {
+      "type": "String",
+      "id": true,
+      "required": true,
+      "index": true
+    },
+    "email": {
+      "type": "String",
+      "required": true
+    },
+    "firstName": "String",
+    "lastName": "String",
+    "registrationDate": "Date",
+    "permissions": "Object"
+  }
+}

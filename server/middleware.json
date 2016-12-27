@@ -1,0 +1,21 @@
+{
+  "initial": {
+    "./middlewares/HidePoweredBy": {}
+  },
+  "auth": {
+    "./middlewares/Auth": {}
+  },
+  "routes": {
+    "loopback#rest": {
+      "paths": [
+        "${restApiRoot}"
+      ]
+    }
+  },
+  "final": {
+    "loopback#urlNotFound": {}
+  },
+  "final:after": {
+    "loopback#errorHandler": {}
+  }
+}

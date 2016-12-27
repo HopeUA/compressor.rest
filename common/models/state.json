@@ -1,0 +1,30 @@
+{
+  "name": "State",
+  "description": "Job state",
+  "plural": "states",
+  "base": "PersistedModel",
+  "strict": true,
+  "properties": {
+    "name": {
+      "type": "String",
+      "required": true,
+      "id": true
+    },
+    "progress": {
+      "type": "Number",
+      "default": 0
+    },
+    "stats": "Object"
+  },
+  "relations": {
+    "events$": {
+      "type": "embedsMany",
+      "model": "Event",
+      "property": "events",
+      "options": {
+        "validate": true,
+        "forceId": false
+      }
+    }
+  }
+}

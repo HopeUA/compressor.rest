@@ -1,0 +1,32 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "User": {
+    "dataSource": "mongo",
+    "public": false
+  },
+  "State": {
+    "dataSource": "mongo",
+    "public": false
+  },
+  "Event": {
+    "dataSource": "mongo",
+    "public": false
+  },
+  "Job": {
+    "dataSource": "mongo",
+    "public": true
+  }
+}

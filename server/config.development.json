@@ -1,0 +1,23 @@
+{
+  "services": {
+    "auth": {
+      "url": "http://localhost:3001/v1"
+    },
+    "compressorNodes": {
+      "node": {
+        "host": "127.0.0.1",
+        "port": 2200,
+        "username": "root",
+        "password": "test"
+      }
+    }
+  },
+  "service": {
+    "group": "test",
+    "name": "compressor",
+    "user": {
+      "accessToken": "H1PI6CLmgS1lPLpCLXgrybP8a08mxBkzvL6CL7gByXDIT0UQg"
+    },
+    "rootPath": "/data/storage"
+  }
+}

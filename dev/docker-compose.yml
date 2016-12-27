@@ -1,0 +1,47 @@
+version: "2"
+
+services:
+  db:
+    image: hope/mongodb:3.2
+    container_name: db.compressor
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./volumes/db:/data/db
+    networks:
+      - private
+
+  auth:
+    build: ./containers/auth
+    container_name: auth.compressor
+    ports:
+      - "3001:3000"
+    networks:
+      - private
+
+  storage:
+    build: ./containers/storage
+    container_name: storage.compressor
+    ports:
+      - "3002:3000"
+    volumes:
+      - ./volumes/storage:/data/storage
+    networks:
+      - private
+
+  compressor:
+    build: ./containers/c1
+    container_name: c1.compressor
+    ports:
+      - "2200:22"
+    environment:
+      SSH_USER: root
+      SSH_PASS: test
+    volumes:
+      - ./volumes/c1:/data/storage
+    networks:
+      - private
+
+networks:
+  private:
+    driver: bridge

@@ -1,0 +1,48 @@
+{
+  "name": "Job",
+  "description": "Single job in queue",
+  "plural": "jobs",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "strict": true,
+  "properties": {
+    "id": {
+      "type": "String",
+      "id": true,
+      "required": true,
+      "index": true
+    },
+    "uid": {
+      "type": "String",
+      "required": true
+    },
+    "data": "Object",
+    "priority": {
+      "type": "Number",
+      "default": 100
+    },
+    "published": {
+      "type": "Boolean",
+      "default": true
+    },
+    "created": {
+      "type": "Date",
+      "required": true
+    },
+    "status": {
+      "type": "String",
+      "default": "new"
+    }
+  },
+  "relations": {
+    "states$": {
+      "type": "embedsMany",
+      "model": "State",
+      "property": "states",
+      "options": {
+        "validate": true,
+        "forceId": false
+      }
+    }
+  }
+}
