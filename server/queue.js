@@ -13,7 +13,7 @@ function getJobs() {
             ],
             published: true,
             failCount: {
-                $lt: 5
+                lt: 5
             }
         },
         order: [
