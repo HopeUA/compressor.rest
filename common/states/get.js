@@ -20,6 +20,8 @@ export class Get extends Handler {
                 this.data.input
             ];
             const onData = (stream) => (data) => {
+                console.log(`${stream}: ${data}`);
+
                 if (stream === 'stdout') {
                     response += data;
                 }
@@ -63,6 +65,8 @@ export class Get extends Handler {
 
             // curl посылает данные о прогрессе в stderr
             const onData = (stream) => (data) => {
+                console.log(`${stream}: ${data}`);
+
                 if (stream === 'stderr') {
                     const reg = /(\d+)\.\d%/gm;
                     let lastMatch;
@@ -97,6 +101,8 @@ export class Get extends Handler {
             ];
 
             const onData = (stream) => (data) => {
+                console.log(`${stream}: ${data}`);
+
                 const match = /Size: (\d+)/.exec(data);
                 if (match) {
                     result = parseInt(match[1], 10);
