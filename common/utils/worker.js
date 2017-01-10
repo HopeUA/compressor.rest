@@ -66,5 +66,8 @@ export default async (job) => {
 
     // Сохраняем результат
     job.status = jobError ? jobStatus.error : jobStatus.done;
+    if (jobError) {
+        job.failCount++;
+    }
     await job.save();
 };

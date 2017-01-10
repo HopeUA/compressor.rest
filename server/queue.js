@@ -11,7 +11,10 @@ function getJobs() {
                 { status: jobStatus.new },
                 { status: jobStatus.error }
             ],
-            published: true
+            published: true,
+            failCount: {
+                $lt: 5
+            }
         },
         order: [
             'priority DESC',
@@ -36,7 +39,7 @@ async function processJobs() {
 }
 
 function next(hasJobsInQueue = true) {
-    const timeout = hasJobsInQueue ? 500 : 500;
+    const timeout = hasJobsInQueue ? 500 : 3000;
     setTimeout(processJobs, timeout);
 }
 

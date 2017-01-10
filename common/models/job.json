@@ -32,7 +32,8 @@
     "status": {
       "type": "String",
       "default": "new"
-    }
+    },
+    "failCount": "Number"
   },
   "relations": {
     "states$": {
