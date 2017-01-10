@@ -54,6 +54,7 @@ export class Compress extends Handler {
                 '-movflags +faststart',
                 '-codec:a aac',
                 '-b:a 256k',
+                '-filter:a volume=-1dB',
                 '-ar 48000',
                 '-threads 16',
                 this.outputFilePath()
