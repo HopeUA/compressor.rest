@@ -75,9 +75,7 @@ export class Put extends Handler {
                 }
 
                 if (stream === 'stdout') {
-                    if (data.indexOf('100 Continue') === -1) {
-                        response += data;
-                    }
+                    response += data.toString().replace('HTTP/1.1 100 Continue', '');
                 }
             };
             const onEnd = () => {
