@@ -42,6 +42,7 @@ module.exports = (Job) => {
         job.id      = ShortId.generate();
         job.status  = jobStatus.new;
         job.created = new Date();
+        job.failCount = 0;
 
         await Job.create(job);
 
