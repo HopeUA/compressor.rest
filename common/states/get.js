@@ -53,6 +53,7 @@ export class Get extends Handler {
      */
     async process() {
         const conn = new SSH();
+        const startTime = new Date();
 
         await new Promise((resolve, reject) => {
             const command = [
@@ -85,6 +86,9 @@ export class Get extends Handler {
             };
             conn.exec(command, onData, onEnd);
         });
+        const endTime = new Date();
+
+        this.store.duration = endTime.getTime() - startTime.getTime();
     }
 
     /**
@@ -121,6 +125,11 @@ export class Get extends Handler {
         if (inputFileSize !== this.store.size) {
             throw new Error(`Incomplete download. Size on server: ${this.store.size}, local size: ${inputFileSize}`);
         }
+
+        // Save stats
+        this.state.stats = {
+            speed: parseInt(this.store.size / this.store.duration * 1000, 10)
+        };
 
         this.state.finish();
     }

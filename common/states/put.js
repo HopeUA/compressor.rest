@@ -44,6 +44,7 @@ export class Put extends Handler {
      */
     async process() {
         const conn = new SSH();
+        const startTime = new Date();
 
         const response = await new Promise((resolve, reject) => {
             let response = '';
@@ -87,6 +88,9 @@ export class Put extends Handler {
         if (response.statusCode !== 201) {
             throw new Error('File status: ' + response.statusCode);
         }
+
+        const endTime = new Date();
+        this.store.duration = endTime.getTime() - startTime.getTime();
     }
 
     /**
@@ -132,6 +136,11 @@ export class Put extends Handler {
         if (outputFileSize !== this.store.size) {
             throw new Error(`Incomplete upload. Local size: ${this.store.size}, server size: ${outputFileSize}`);
         }
+
+        // Save stats
+        this.state.stats = {
+            speed: parseInt(this.store.size / this.store.duration * 1000, 10)
+        };
 
         this.state.finish();
     }

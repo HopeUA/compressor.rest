@@ -30,6 +30,7 @@ export class Compress extends Handler {
     async process() {
         const conn = new SSH();
 
+        let speed = 0;
         await new Promise((resolve, reject) => {
             const date = new Date();
             const meta = this.data.meta || {};
@@ -59,15 +60,33 @@ export class Compress extends Handler {
                 '-threads 16',
                 this.outputFilePath()
             ];
+            const regSpeed = /speed=(\d+\.\d+)x/m;
 
             const onData = (stream) => (data) => {
                 console.log(`${stream}: ${data}`);
+
+                if (stream === 'stderr') {
+                    const match = regSpeed.exec(data);
+                    if (match !== null) {
+                        speed = parseFloat(match[1]);
+                    }
+                }
             };
             const onEnd = () => {
                 resolve();
             };
             conn.exec(command, onData, onEnd);
         });
+
+        this.store.speed = speed;
+    }
+
+    async finish() {
+        // Save stats
+        this.state.stats = {
+            speed: this.store.speed
+        };
+        this.state.finish();
     }
 
     inputFilePath() {
