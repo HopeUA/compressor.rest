@@ -133,6 +133,8 @@ export default class SSH {
     async exec (command, onData, onEnd) {
         const conn = await this.getConnection();
 
+        console.log(`SSH command exec: ${command.join(' ')}`);
+
         conn.exec(command.join(' '), (err, stream) => {
             if (err) {
                 throw err;
