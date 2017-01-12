@@ -3,6 +3,7 @@ import Worker from 'common/utils/worker';
 import { jobStatus } from 'common/utils/worker';
 
 const Job = App.models.Job;
+const Settings = App.models.Settings;
 
 function getJobs() {
     return Job.find({
@@ -24,7 +25,21 @@ function getJobs() {
     });
 }
 
+async function isActive() {
+    const settings = await Settings.findOne();
+
+    if (settings === null) {
+        return false;
+    }
+
+    return !!settings.active;
+}
+
 async function processJobs() {
+    if (!await isActive()) {
+        return next(false);
+    }
+
     const jobs = await getJobs();
 
     if (jobs.length === 0) {
