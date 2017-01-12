@@ -28,5 +28,9 @@
   "Job": {
     "dataSource": "mongo",
     "public": true
+  },
+  "Settings": {
+    "dataSource": "mongo",
+    "public": true
   }
 }

@@ -1,0 +1,10 @@
+{
+  "name": "Settings",
+  "description": "App dynamic settings",
+  "plural": "settings",
+  "base": "PersistedModel",
+  "strict": true,
+  "properties": {
+    "active": "Boolean"
+  }
+}

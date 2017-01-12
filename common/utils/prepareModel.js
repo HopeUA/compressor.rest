@@ -37,11 +37,6 @@ export default function (Model, options = {}) {
     }
 
     /**
-     * TODO
-     * GET /model
-     */
-
-    /**
      * GET /model/{id}
      */
     Model.remoteMethod('getOne', {
