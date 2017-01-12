@@ -3,6 +3,10 @@ import Path from 'path';
 import Handler from './handler';
 import SSH from 'common/utils/ssh';
 
+function escapeQuotes(str) {
+    return str.replace(/\x22/g, '\\\x22');
+}
+
 export class Compress extends Handler {
     async init() {
         const conn = new SSH();
@@ -41,9 +45,9 @@ export class Compress extends Handler {
                 `-i ${this.inputFilePath()}`,
                 '-map_metadata:g -1',
                 `-metadata:g creation_time="${date.toISOString()}"`,
-                `-metadata:g show="${meta.show}"`,
+                `-metadata:g show="${escapeQuotes(meta.show)}"`,
                 `-metadata:g episode_id="${meta.episode}"`,
-                `-metadata:g title="${meta.title}"`,
+                `-metadata:g title="${escapeQuotes(meta.title)}"`,
                 '-codec:v libx264',
                 '-b:v 3M',
                 '-r:v 25',
