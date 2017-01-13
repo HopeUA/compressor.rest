@@ -86,6 +86,33 @@ export class Compress extends Handler {
     }
 
     async finish() {
+        const conn = new SSH();
+
+        const outputFileSize = await new Promise((resolve, reject) => {
+            let result;
+            const command = [
+                'stat',
+                this.outputFilePath()
+            ];
+
+            const onData = (stream) => (data) => {
+                console.log(`${stream}: ${data}`);
+
+                const match = /Size: (\d+)/.exec(data);
+                if (match) {
+                    result = parseInt(match[1], 10);
+                }
+            };
+            const onEnd = () => {
+                resolve(result);
+            };
+            conn.exec(command, onData, onEnd);
+        });
+
+        if (outputFileSize === 0) {
+            throw new Error('Compression error. File is empty');
+        }
+
         // Save stats
         this.state.stats = {
             speed: this.store.speed

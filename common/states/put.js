@@ -137,6 +137,23 @@ export class Put extends Handler {
             throw new Error(`Incomplete upload. Local size: ${this.store.size}, server size: ${outputFileSize}`);
         }
 
+        // Clean files
+        await new Promise((resolve, reject) => {
+            const command = [
+                'rm',
+                '-f',
+                this.inputFilePath(),
+                this.outputFilePath()
+            ];
+            const onData = (stream) => (data) => {
+                console.log(`${stream}: ${data}`);
+            };
+            const onEnd = () => {
+                return resolve();
+            };
+            conn.exec(command, onData, onEnd);
+        });
+
         // Save stats
         this.state.stats = {
             speed: parseInt(this.store.size / this.store.duration * 1000, 10)
@@ -145,6 +162,11 @@ export class Put extends Handler {
         this.state.finish();
     }
 
+    inputFilePath() {
+        const file = Path.parse(this.data.input);
+
+        return `${this.options.rootPath}/input/${file.name}-${this.options.jobId}${file.ext}`;
+    }
     outputFilePath() {
         const file = Path.parse(this.data.output);
 
