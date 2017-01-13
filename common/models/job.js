@@ -61,7 +61,8 @@ module.exports = (Job) => {
         http: { verb: 'get', path: '/' },
         accepts: [
             { arg: 'limit', type: 'number' },
-            { arg: 'offset', type: 'number' }
+            { arg: 'offset', type: 'number' },
+            { arg: 'status', type: 'string' }
         ],
         returns: { type: 'Object', root: true }
     });
@@ -92,13 +93,20 @@ module.exports = (Job) => {
         }
         ctx.args.offset = offset;
     });
-    Job.getAll = async (limit, offset) => {
+    Job.getAll = async (limit, offset, status) => {
+        const where = {};
+        if (status) {
+            where.status = status;
+        }
+
         const results =  await Promise.all([
             Job.find({
+                where,
                 limit,
+                skip: offset,
                 order: 'created DESC'
             }),
-            Job.count()
+            Job.count(where)
         ]);
 
         return {
@@ -113,6 +121,10 @@ module.exports = (Job) => {
     Job.afterRemote('getAll', async (ctx) => {
         if (ctx.result && Array.isArray(ctx.result.jobs)) {
             ctx.result.jobs.forEach(Job.toPublic);
+
+            if (ctx.result.jobs.length === 0) {
+                ctx.res.statusCode = 404;
+            }
         }
     });
 };
