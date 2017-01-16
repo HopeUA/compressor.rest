@@ -62,7 +62,8 @@ module.exports = (Job) => {
         accepts: [
             { arg: 'limit', type: 'number' },
             { arg: 'offset', type: 'number' },
-            { arg: 'status', type: 'string' }
+            { arg: 'status', type: 'string' },
+            { arg: 'uid', type: 'string' }
         ],
         returns: { type: 'Object', root: true }
     });
@@ -93,10 +94,13 @@ module.exports = (Job) => {
         }
         ctx.args.offset = offset;
     });
-    Job.getAll = async (limit, offset, status) => {
+    Job.getAll = async (limit, offset, status, uid) => {
         const where = {};
         if (status) {
             where.status = status;
+        }
+        if (uid) {
+            where.uid = uid;
         }
 
         const results =  await Promise.all([
