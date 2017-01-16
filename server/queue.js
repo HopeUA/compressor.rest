@@ -5,23 +5,20 @@ import { jobStatus } from 'common/utils/worker';
 const Job = App.models.Job;
 const Settings = App.models.Settings;
 
-function getJobs() {
-    return Job.find({
+function getJob() {
+    return Job.findOne({
         where: {
             or: [
                 { status: jobStatus.new },
                 { status: jobStatus.error }
             ],
             published: true,
-            failCount: {
-                lt: 5
-            }
+            failCount: { lt: 5 }
         },
         order: [
             'priority DESC',
             'created ASC'
-        ],
-        limit: 5
+        ]
     });
 }
 
@@ -40,15 +37,12 @@ async function processJobs() {
         return next(false);
     }
 
-    const jobs = await getJobs();
+    const job = await getJob();
 
-    if (jobs.length === 0) {
+    if (job === null) {
         return next(false);
     }
-
-    for (const job of jobs) {
-        await Worker(job);
-    }
+    await Worker(job);
 
     return next();
 }
