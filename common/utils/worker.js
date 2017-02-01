@@ -1,6 +1,6 @@
 import App from 'server/server';
 import Logger from 'common/utils/logger';
-import * as StateHandlers from 'common/states';
+import * as PhaseHandlers from 'common/phases';
 
 export const jobStatus = {
     new: 'new',
@@ -37,7 +37,7 @@ export default async (job) => {
                 rootPath: service.rootPath,
                 accessToken: service.user.accessToken
             };
-            const handler = new StateHandlers[phase](state, job.data, options);
+            const handler = new PhaseHandlers[phase](state, job.data, options);
 
             Logger.info(`${phase}: Init`);
             await state.addEvent('init_start');

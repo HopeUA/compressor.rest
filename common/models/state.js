@@ -12,11 +12,13 @@ module.exports = (State) => {
 
         if (value !== this.progress) {
             this.progress = value;
+            this.save();
         }
     };
 
     State.prototype.finish = function() {
         this.progress = 100;
+        this.save();
     };
 
     State.prototype.addEvent = async function(type, data) {
@@ -30,6 +32,7 @@ module.exports = (State) => {
         });
 
         this.events.push(event);
+        this.save();
     };
 
     State.prototype.error = function(message) {
