@@ -56,11 +56,13 @@ export class Compress extends Handler {
                 '-profile:v baseline',
                 '-level 3.0',
                 '-preset medium',
+                '-vsync 1',
                 '-movflags +faststart',
                 '-codec:a aac',
                 '-b:a 256k',
                 '-filter:a volume=-1dB',
                 '-ar 48000',
+                '-async 1',
                 '-threads 24',
                 this.outputFilePath()
             ];
