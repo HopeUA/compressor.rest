@@ -8,6 +8,7 @@ ENV \
 WORKDIR /data/app
 
 RUN \
+    apk upgrade --no-cache && \
     apk add --no-cache --virtual=build-dependencies git python make g++ && \
     git clone -b "v${APP_VERSION}" --single-branch --depth 1 https://github.com/HopeUA/auth.rest.git . && \
     npm install && \

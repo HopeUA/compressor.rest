@@ -54,6 +54,81 @@ module.exports = (Job) => {
     });
 
     /**
+     * PUT /jobs/:id/reset
+     * Access jobs:write
+     */
+    Job.remoteMethod('resetOne', {
+        http: { verb: 'put', path: '/reset' },
+        accepts: {
+            arg: 'data',
+            type: 'object',
+            http: { source: 'body' }
+        },
+        returns: {
+            arg: 'job',
+            type: 'Job',
+            root: true
+        },
+        isStatic: false
+    });
+    Job.beforeRemote('resetOne', async (ctx) => {
+        if (!Acl.isGranted(ctx.req.user, 'jobs:write')) {
+            const error = new Error('Access denied');
+            error.statusCode = 401;
+            throw error;
+        }
+    });
+    Job.prototype.resetOne = async function() {
+        const job = this;
+        job.status  = jobStatus.new;
+        job.failCount = 0;
+        await job.states$.destroyAll();
+        await job.save();
+
+        return job;
+    };
+    Job.afterRemote('resetOne', async (ctx, job) => {
+        ctx.result = Job.toPublic(job);
+        ctx.res.statusCode = 201;
+    });
+
+    /**
+     * PUT /jobs/:id
+     * Access jobs:write
+     */
+    Job.remoteMethod('updateOne', {
+        http: { verb: 'put', path: '/' },
+        accepts: {
+            arg: 'data',
+            type: 'object',
+            http: { source: 'body' }
+        },
+        returns: {
+            arg: 'job',
+            type: 'Job',
+            root: true
+        },
+        isStatic: false
+    });
+    Job.beforeRemote('updateOne', async (ctx) => {
+        if (!Acl.isGranted(ctx.req.user, 'jobs:write')) {
+            const error = new Error('Access denied');
+            error.statusCode = 401;
+            throw error;
+        }
+    });
+    Job.prototype.updateOne = async function(data) {
+        const job = this;
+        await job.updateAttributes(data);
+
+        return job;
+    };
+    Job.afterRemote('updateOne', async (ctx, job) => {
+        ctx.result = Job.toPublic(job);
+        ctx.res.statusCode = 201;
+    });
+
+    /**
      * GET /jobs
      * Access: jobs.read
      */
