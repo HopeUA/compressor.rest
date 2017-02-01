@@ -1,37 +1,36 @@
 export default function (Model, options = {}) {
-    Model.disableRemoteMethod('create', true);
-    Model.disableRemoteMethod('upsert', true);
-    Model.disableRemoteMethod('updateAll', true);
-    Model.disableRemoteMethod('updateAttributes', false);
-    Model.disableRemoteMethod('createChangeStream', true);
+    Model.disableRemoteMethodByName('create');
+    Model.disableRemoteMethodByName('upsert');
+    Model.disableRemoteMethodByName('updateAll');
+    Model.disableRemoteMethodByName('updateAttributes');
+    Model.disableRemoteMethodByName('createChangeStream');
 
-    Model.disableRemoteMethod('find', true);
-    Model.disableRemoteMethod('findById', true);
-    Model.disableRemoteMethod('findOne', true);
-    Model.disableRemoteMethod('count', true);
-    Model.disableRemoteMethod('exists', true);
+    Model.disableRemoteMethodByName('find');
+    Model.disableRemoteMethodByName('findById');
+    Model.disableRemoteMethodByName('findOne');
+    Model.disableRemoteMethodByName('count');
+    Model.disableRemoteMethodByName('exists');
 
     // Relations
     try {
         Object.keys(Model.definition.settings.relations).forEach(function(relation) {
-            Model.disableRemoteMethod(`__findById__${relation}`, false);
-            Model.disableRemoteMethod(`__destroyById__${relation}`, false);
-            Model.disableRemoteMethod(`__updateById__${relation}`, false);
-            Model.disableRemoteMethod(`__exists__${relation}`, false);
-            Model.disableRemoteMethod(`__link__${relation}`, false);
-            Model.disableRemoteMethod(`__get__${relation}`, false);
-            Model.disableRemoteMethod(`__create__${relation}`, false);
-            Model.disableRemoteMethod(`__update__${relation}`, false);
-            Model.disableRemoteMethod(`__destroy__${relation}`, false);
-            Model.disableRemoteMethod(`__unlink__${relation}`, false);
-            Model.disableRemoteMethod(`__count__${relation}`, false);
-            Model.disableRemoteMethod(`__delete__${relation}`, false);
+            Model.disableRemoteMethodByName(`prototype.__findById__${relation}`);
+            Model.disableRemoteMethodByName(`prototype.__destroyById__${relation}`);
+            Model.disableRemoteMethodByName(`prototype.__updateById__${relation}`);
+            Model.disableRemoteMethodByName(`prototype.__exists__${relation}`);
+            Model.disableRemoteMethodByName(`prototype.__link__${relation}`);
+            Model.disableRemoteMethodByName(`prototype.__get__${relation}`);
+            Model.disableRemoteMethodByName(`prototype.__create__${relation}`);
+            Model.disableRemoteMethodByName(`prototype.__update__${relation}`);
+            Model.disableRemoteMethodByName(`prototype.__destroy__${relation}`);
+            Model.disableRemoteMethodByName(`prototype.__unlink__${relation}`);
+            Model.disableRemoteMethodByName(`prototype.__count__${relation}`);
+            Model.disableRemoteMethodByName(`prototype.__delete__${relation}`);
         });
     } catch(error) {}
 
     if (options.clean) {
-        // Model.disableRemoteMethod('create', true);
-        Model.disableRemoteMethod('deleteById', true);
+        Model.disableRemoteMethodByName('deleteById');
 
         return;
     }
