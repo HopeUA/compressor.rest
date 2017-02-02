@@ -89,7 +89,7 @@ module.exports = (Job) => {
     };
     Job.afterRemote('resetOne', async (ctx, job) => {
         ctx.result = Job.toPublic(job);
-        ctx.res.statusCode = 201;
+        ctx.res.statusCode = 200;
     });
 
     /**
@@ -125,7 +125,7 @@ module.exports = (Job) => {
     };
     Job.afterRemote('updateOne', async (ctx, job) => {
         ctx.result = Job.toPublic(job);
-        ctx.res.statusCode = 201;
+        ctx.res.statusCode = 200;
     });
 
     /**
