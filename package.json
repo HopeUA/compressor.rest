@@ -1,7 +1,7 @@
 {
   "name": "compressor.rest",
   "description": "Hope Compressor Service",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "main": "server/server.js",
   "license": "MIT",
   "author": "Sergey Sadovoi <sergey@hope.ua>",
