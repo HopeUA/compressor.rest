@@ -52,6 +52,7 @@ export class Compress extends Handler {
                     audioFilters.push('adelay=120|120');
                     break;
                 case '4/3->Stream':
+                    videoFilters.push('yadif=0:-1:0');
                     videoFilters.push('scale=896:672');
                     videoFilters.push('crop=896:576');
                     videoFilters.push('pad=1024:576:64:0');
@@ -59,12 +60,6 @@ export class Compress extends Handler {
             }
             videoFilters.push('scale=720x576');
             videoFilters.push('setdar=16/9');
-
-            // Deinterlace
-            switch (this.data.preset) {
-                case '4/3->Stream':
-                    videoFilters.push('yadif=0:-1:0');
-            }
 
             const command = [
                 'ffmpeg',
