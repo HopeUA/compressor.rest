@@ -43,7 +43,7 @@ export class Compress extends Handler {
             const date = new Date();
             const meta = this.data.meta || {};
 
-            // Presets – 16/9->Stream, 4/3->Stream, 4/3i->Stream
+            // Presets – 16/9->Stream, 4/3->Stream
             const videoFilters = [];
             const audioFilters = ['volume=-1dB'];
 
@@ -52,7 +52,6 @@ export class Compress extends Handler {
                     audioFilters.push('adelay=120|120');
                     break;
                 case '4/3->Stream':
-                case '4/3i->Stream':
                     videoFilters.push('scale=896:672');
                     videoFilters.push('crop=896:576');
                     videoFilters.push('pad=1024:576:64:0');
@@ -63,7 +62,7 @@ export class Compress extends Handler {
 
             // Deinterlace
             switch (this.data.preset) {
-                case '4/3i->Stream':
+                case '4/3->Stream':
                     videoFilters.push('yadif=0:-1:0');
             }
 
