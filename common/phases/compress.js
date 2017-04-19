@@ -2,6 +2,7 @@ import Path from 'path';
 
 import Handler from './handler';
 import SSH from 'common/utils/ssh';
+import getPreset from 'common/utils/compressor-presets';
 
 function escapeQuotes(str) {
     return str.replace(/\x22/g, '\\\x22');
@@ -43,23 +44,10 @@ export class Compress extends Handler {
             const date = new Date();
             const meta = this.data.meta || {};
 
-            // Presets – 16/9->Stream, 4/3->Stream
-            const videoFilters = [];
-            const audioFilters = ['volume=-1dB'];
-
-            switch (this.data.preset) {
-                case '16/9->Stream':
-                    audioFilters.push('adelay=120|120');
-                    break;
-                case '4/3->Stream':
-                    videoFilters.push('yadif=0:-1:0');
-                    videoFilters.push('scale=896:672');
-                    videoFilters.push('crop=896:576');
-                    videoFilters.push('pad=1024:576:64:0');
-                    break;
+            const preset = getPreset(this.data.preset);
+            if (preset === null) {
+                return reject(new Error(`Invalid preset ${this.data.preset}`));
             }
-            videoFilters.push('scale=720x576');
-            videoFilters.push('setdar=16/9');
 
             const command = [
                 'ffmpeg',
@@ -69,20 +57,7 @@ export class Compress extends Handler {
                 `-metadata:g show="${escapeQuotes(meta.show)}"`,
                 `-metadata:g episode_id="${meta.episode}"`,
                 `-metadata:g title="${escapeQuotes(meta.title)}"`,
-                '-codec:v libx264',
-                '-b:v 3M',
-                '-r:v 25',
-                '-filter:v "' + videoFilters.join(',') + '"',
-                '-pix_fmt:v yuv420p',
-                '-profile:v baseline',
-                '-level 3.0',
-                '-preset medium',
-                '-movflags +faststart',
-                '-codec:a aac',
-                '-b:a 256k',
-                '-filter:a "' + audioFilters.join(',') + '"',
-                '-ar 48000',
-                '-threads 24',
+                ...preset,
                 this.outputFilePath()
             ];
             const regSpeed = /speed=(\d+\.\d+)x/m;
