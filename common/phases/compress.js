@@ -11,6 +11,10 @@ export class Compress extends Handler {
     async init() {
         const conn = new SSH();
 
+        if (!this.data.preset) {
+            throw new Error('Preset is not defined');
+        }
+
         await new Promise((resolve, reject) => {
             const command = [
                 'rm',
@@ -39,7 +43,24 @@ export class Compress extends Handler {
             const date = new Date();
             const meta = this.data.meta || {};
 
-            // Presets – 16/9->Stream и 4/3->Stream
+            // Presets – 16/9->Stream, 4/3->Stream
+            const videoFilters = [];
+            const audioFilters = ['volume=-1dB'];
+
+            switch (this.data.preset) {
+                case '16/9->Stream':
+                    audioFilters.push('adelay=120|120');
+                    break;
+                case '4/3->Stream':
+                    videoFilters.push('yadif=0:-1:0');
+                    videoFilters.push('scale=896:672');
+                    videoFilters.push('crop=896:576');
+                    videoFilters.push('pad=1024:576:64:0');
+                    break;
+            }
+            videoFilters.push('scale=720x576');
+            videoFilters.push('setdar=16/9');
+
             const command = [
                 'ffmpeg',
                 `-i ${this.inputFilePath()}`,
@@ -51,7 +72,7 @@ export class Compress extends Handler {
                 '-codec:v libx264',
                 '-b:v 3M',
                 '-r:v 25',
-                this.data.preset === '16/9->Stream' ? '-filter:v scale=720x576,setdar=16/9,yadif=0:-1:1' : '-filter:v scale=896:672,crop=896:576,pad=1024:576:64:0,scale=720:576,setdar=16/9,yadif=0:-1:1',
+                '-filter:v "' + videoFilters.join(',') + '"',
                 '-pix_fmt:v yuv420p',
                 '-profile:v baseline',
                 '-level 3.0',
@@ -59,7 +80,7 @@ export class Compress extends Handler {
                 '-movflags +faststart',
                 '-codec:a aac',
                 '-b:a 256k',
-                '-filter:a volume=-1dB',
+                '-filter:a "' + audioFilters.join(',') + '"',
                 '-ar 48000',
                 '-threads 24',
                 this.outputFilePath()
