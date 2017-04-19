@@ -1,26 +1,26 @@
-import Loopback from 'loopback';
-import Boot from 'loopback-boot';
+import loopback from 'loopback';
+import boot from 'loopback-boot';
 
-const App = module.exports = Loopback();
+const app = module.exports = loopback();
 
-App.start = () => {
+app.start = () => {
     // start the web server
-    return App.listen(() => {
-        App.emit('started');
-        const baseUrl = App.get('url').replace(/\/$/, '');
+    return app.listen(() => {
+        app.emit('started');
+        const baseUrl = app.get('url').replace(/\/$/, '');
         console.log('REST API is available at: %s', baseUrl);
     });
 };
 
 // Bootstrap the application, configure models, datasources and middleware.
 // Sub-apps like REST API are mounted via boot scripts.
-Boot(App, __dirname, (err) => {
+boot(app, __dirname, (err) => {
     if (err) {
         throw err;
     }
 
     // start the server if `$ node server.js`
     if (require.main === module) {
-        App.start();
+        app.start();
     }
 });
