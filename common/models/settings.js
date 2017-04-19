@@ -77,4 +77,8 @@ module.exports = (Settings) => {
         ctx.result = Settings.toPublic(settings);
         ctx.res.statusCode = 200;
     });
+
+    // Settings.sharedClass.methods().forEach((m) => {
+    //     console.log(m.name, m.isStatic);
+    // });
 };

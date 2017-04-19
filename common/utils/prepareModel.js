@@ -1,8 +1,12 @@
 export default function (Model, options = {}) {
     Model.disableRemoteMethodByName('create');
+    Model.disableRemoteMethodByName('replaceOrCreate');
+    Model.disableRemoteMethodByName('replaceById');
     Model.disableRemoteMethodByName('upsert');
+    Model.disableRemoteMethodByName('upsertWithWhere');
     Model.disableRemoteMethodByName('updateAll');
     Model.disableRemoteMethodByName('updateAttributes');
+    Model.disableRemoteMethodByName('prototype.patchAttributes');
     Model.disableRemoteMethodByName('createChangeStream');
 
     Model.disableRemoteMethodByName('find');
