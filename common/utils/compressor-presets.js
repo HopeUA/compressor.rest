@@ -6,7 +6,7 @@ export default function getPreset(name) {
         const videoFilters = [];
         const audioFilters = ['volume=-1dB'];
 
-        switch (this.data.preset) {
+        switch (name) {
             case '16/9->Stream':
                 audioFilters.push('adelay=120|120');
                 break;
