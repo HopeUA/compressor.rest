@@ -12,17 +12,17 @@ module.exports = (State) => {
 
         if (value !== this.progress) {
             this.progress = value;
-            process.nextTick(() => {
-                this.save();
-            });
+            // process.nextTick(() => {
+            //     this.save();
+            // });
         }
     };
 
     State.prototype.finish = function() {
         this.progress = 100;
-        process.nextTick(() => {
-            this.save();
-        });
+        // process.nextTick(() => {
+        //     this.save();
+        // });
     };
 
     State.prototype.addEvent = async function(type, data) {
@@ -36,9 +36,9 @@ module.exports = (State) => {
         });
 
         this.events.push(event);
-        process.nextTick(() => {
-            this.save();
-        });
+        // process.nextTick(() => {
+        //     this.save();
+        // });
     };
 
     State.prototype.error = function(message) {
